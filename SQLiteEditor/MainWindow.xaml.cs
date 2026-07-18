@@ -11,11 +11,29 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 
 namespace SQLiteEditor
 {
     public partial class MainWindow : Window
     {
+        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
+        private static extern IntPtr SendMessage( IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam );
+
+        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
+        private static extern IntPtr CopyIcon( IntPtr hIcon );
+
+        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        private static extern bool DestroyIcon( IntPtr hIcon );
+
+        private const uint WM_SETICON = 0x0080;
+        private static readonly IntPtr ICON_SMALL = IntPtr.Zero; // 0
+        private static readonly IntPtr ICON_BIG = new IntPtr( 1 ); // 1
+
+        private IntPtr _copiedHIcon = IntPtr.Zero;
+        private IntPtr _hwnd = IntPtr.Zero;
+
         /// <summary>
         /// 表示しているウインドウ数の数
         /// </summary>
@@ -36,10 +54,17 @@ namespace SQLiteEditor
 
             /* 表示初期化 */
             InitializeComponent();
+#if false
             this.Icon = Imaging.CreateBitmapSourceFromHIcon(
                 SystemIcons.Application.Handle,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions()) ;
+#elif false
+            this.Icon = new BitmapImage( new Uri( "pack://application:,,,/image/SQLiteEditor.ico", UriKind.Absolute ) );
+#else
+
+#endif
+
             MouseLeftButtonDown += ( _, __ ) => { DragMove(); };
 
             /* 設定読み込み */
@@ -64,6 +89,31 @@ namespace SQLiteEditor
                 ref corner,
                 sizeof( int ) );
 
+            Uri uri = new Uri( "pack://application:,,,/Resources/SQLiteEditor.ico", UriKind.Absolute );
+            StreamResourceInfo sri = Application.GetResourceStream( uri );
+            if( sri != null )
+            {
+                using( var stream = sri.Stream )
+                using( var icon = new Icon( stream ) )
+                {
+                    IntPtr hIcon = icon.Handle;
+
+                    // HICON をコピーしてプロセス側で管理する（CopyIcon を使う）
+                    _copiedHIcon = CopyIcon( hIcon );
+
+                    // コピーに成功したらコピーしたハンドルを使う（破棄してもコピーは生きる）
+                    IntPtr useHIcon = _copiedHIcon != IntPtr.Zero ? _copiedHIcon : hIcon;
+
+                    // WPF の Window.Icon に設定（タイトルバーの表示等に使われる）
+                    this.Icon = Imaging.CreateBitmapSourceFromHIcon( useHIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions() );
+
+                    // ネイティブアイコンを設定（タスクバー/Alt+Tab）
+                    SendMessage( _hwnd, WM_SETICON, ICON_BIG, useHIcon );
+                    SendMessage( _hwnd, WM_SETICON, ICON_SMALL, useHIcon );
+                    // icon は using で Dispose されるが、コピーしたハンドルは引き続き有効
+                }
+            }
+
             /* 透過表示設定 */
             this.SetTransparency( Properties.Settings.Default.Transparent );
 
@@ -82,6 +132,15 @@ namespace SQLiteEditor
         /// <param name="e"></param>
         private void Window_Closing( object sender, System.ComponentModel.CancelEventArgs e )
         {
+            if( _copiedHIcon != IntPtr.Zero )
+            {
+                // ウィンドウから解除してから破棄
+                SendMessage( _hwnd, WM_SETICON, ICON_BIG, IntPtr.Zero );
+                SendMessage( _hwnd, WM_SETICON, ICON_SMALL, IntPtr.Zero );
+
+                DestroyIcon( _copiedHIcon );
+                _copiedHIcon = IntPtr.Zero;
+            }
 
             if( 0 >= --MainWindow.WindowCount )
             {
