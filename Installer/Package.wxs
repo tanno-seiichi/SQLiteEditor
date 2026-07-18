@@ -14,6 +14,9 @@
     <ui:WixUI Id="WixUI_Minimal" />
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 	  
+	  <Icon Id="ProductIcon" SourceFile="..\SQLiteEditor\Resources\SQLiteEditor.ico" />
+	  <Property Id="ARPPRODUCTICON" Value="ProductIcon" />	  
+    
     <Feature Id="Main">
       <ComponentGroupRef Id="SQLiteEditor" />
     </Feature>
