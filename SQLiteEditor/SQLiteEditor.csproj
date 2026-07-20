@@ -124,5 +124,8 @@
   <ItemGroup>
     <Resource Include="Resources\SQLiteEditor.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\SQLiteEditor.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

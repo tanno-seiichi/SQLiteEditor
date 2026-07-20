@@ -69,5 +69,15 @@ namespace SQLiteEditor.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap SQLiteEditorPng {
+            get {
+                object obj = ResourceManager.GetObject("SQLiteEditorPng", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

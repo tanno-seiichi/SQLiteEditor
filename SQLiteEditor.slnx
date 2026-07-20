@@ -8,6 +8,9 @@
   <Folder Name="/lib/">
     <File Path="lib/System.Data.SQLite.dll" />
   </Folder>
+  <Folder Name="/ソリューション項目/">
+    <File Path="LICENSE.txt" />
+  </Folder>
   <Project Path="Installer/Installer.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0" Id="782a0f1f-8b9a-4603-918b-4cde5046e8f6">
     <Platform Solution="*|Any CPU" Project="x64" />
   </Project>
