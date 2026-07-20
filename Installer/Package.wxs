@@ -3,7 +3,7 @@
   <Package 
 	  Name="SQLiteEditor" 
 	  Manufacturer="tanno-seiichi" 
-	  Version="2.6.1" 
+	  Version="3.0.0" 
 	  ProductCode="*" 
 	  UpgradeCode="{A02A0C9D-338C-4099-A7C4-CBE212191E50}"
 	  Scope="perMachine">

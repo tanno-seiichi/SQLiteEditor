@@ -8,11 +8,11 @@ using System.Windows;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("SQLiteEditor")]
-[assembly: AssemblyDescription("System.Data.SQLite RC4形式のパスワードに対応したシンプルなDBエディター")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("tanno-seiichi")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SQLiteEditor")]
-[assembly: AssemblyCopyright("Public Domain (CC0 1.0)")]
+[assembly: AssemblyCopyright( "Copyright © 2026 tanno-seiichi" )]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -48,5 +48,5 @@ using System.Windows;
 //      ビルド番号
 //      リビジョン
 //
-[assembly: AssemblyVersion("2.6.1.0")]
-[assembly: AssemblyFileVersion("2.6.1.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]
