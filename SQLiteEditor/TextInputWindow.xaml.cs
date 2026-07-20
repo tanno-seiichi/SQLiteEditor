@@ -19,9 +19,9 @@ namespace SQLiteEditor
         /// <summary>
         /// ウインドウ起動時の処理
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_Loaded( object sender, RoutedEventArgs e )
+        /// <param name="a_sender"></param>
+        /// <param name="a_e"></param>
+        private void WindowLoaded( object a_sender, RoutedEventArgs a_e )
         {
             this.Input.Focus();
             Keyboard.Focus( this.Input );
@@ -30,17 +30,17 @@ namespace SQLiteEditor
         /// <summary>
         /// Inputコントロールのキーアップイベント
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Input_PreviewKeyUp( object sender, KeyEventArgs e )
+        /// <param name="a_sender"></param>
+        /// <param name="a_e"></param>
+        private void InputPreviewKeyUp( object a_sender, KeyEventArgs a_e )
         {
-            if( Key.Enter == e.Key )
+            if( Key.Enter == a_e.Key )
             {
                 /*  OKボタンと同じ処理 */
                 this.DialogResult = true;
                 this.Close();
             }
-            else if( Key.Escape == e.Key )
+            else if( Key.Escape == a_e.Key )
             {
                 /*  キャンセルボタンと同じ処理 */
                 this.DialogResult = false;
@@ -55,9 +55,9 @@ namespace SQLiteEditor
         /// <summary>
         /// OKボタンクリック時の処理
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OkButton_Click( object sender, RoutedEventArgs e )
+        /// <param name="a_sender"></param>
+        /// <param name="a_e"></param>
+        private void OkButtonClick( object a_sender, RoutedEventArgs a_e )
         {
             this.DialogResult = true;
             this.Close();
@@ -66,9 +66,9 @@ namespace SQLiteEditor
         /// <summary>
         /// キャンセルボタンクリック時の処理
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CancelButton_Click( object sender, RoutedEventArgs e )
+        /// <param name="a_sender"></param>
+        /// <param name="a_e"></param>
+        private void CancelButtonClick( object a_sender, RoutedEventArgs a_e )
         {
             this.DialogResult = false;
             this.Close();

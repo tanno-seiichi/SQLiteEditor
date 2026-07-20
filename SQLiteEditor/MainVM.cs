@@ -12,64 +12,64 @@ namespace SQLiteEditor
     internal class MainVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private void RaisePropertyChanged( string propertyName )
+        private void RaisePropertyChanged( string a_propertyName )
         {
-            this.PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
+            this.PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( a_propertyName ) );
         }
 
-        public string AppTitle { get; set; } = string.Empty;
+        public string appTitle { get; set; } = string.Empty;
 
-        public string StatusMessage { get; set; } = string.Empty;
+        public string statusMessage { get; set; } = string.Empty;
 
-        public string SqlExecuted { get; set; } = string.Empty;
+        public string sqlExecuted { get; set; } = string.Empty;
 
-        private string m_DbFilePath = string.Empty;    
-        public string DbFilePath
+        private string m_dbFilePath = string.Empty;    
+        public string dbFilePath
         { 
             get
             {
-                return this.m_DbFilePath;
+                return this.m_dbFilePath;
             }
             set
             {
-                this.m_DbFilePath = value;
-                this.AppTitle = Assembly.GetExecutingAssembly().GetName().Name + " v" + Assembly.GetExecutingAssembly().GetName().Version + " [" + ( string.IsNullOrEmpty( this.m_DbFilePath ) ? "DBファイル未指定" : this.m_DbFilePath ) + "]";
-                this.RaisePropertyChanged( nameof( this.AppTitle ) ); 
+                this.m_dbFilePath = value;
+                this.appTitle = Assembly.GetExecutingAssembly().GetName().Name + " v" + Assembly.GetExecutingAssembly().GetName().Version + " [" + ( string.IsNullOrEmpty( this.m_dbFilePath ) ? "DBファイル未指定" : this.m_dbFilePath ) + "]";
+                this.RaisePropertyChanged( nameof( this.appTitle ) ); 
             } 
         }
 
-        public string SqlStmt { get; set; } = string.Empty;
+        public string sqlStmt { get; set; } = string.Empty;
 
-        public DataView DataList { get; private set; } = new DataView();
+        public DataView dataList { get; private set; } = new DataView();
 
-        public void Execute( string sqlStmt = "" )
+        public void Execute( string a_sqlStmt = "" )
         {
             // DBファイルの存在チェック
-            if( !File.Exists( this.DbFilePath ) )
+            if( !File.Exists( this.dbFilePath ) )
             {
-                if( string.IsNullOrEmpty( this.DbFilePath ) )
+                if( string.IsNullOrEmpty( this.dbFilePath ) )
                 {
                     MessageBox.Show( "DBファイルが指定されていません。", "エラー", MessageBoxButton.OK, MessageBoxImage.Error );
-                    this.StatusMessage = "DBファイルが指定されていません。";
+                    this.statusMessage = "DBファイルが指定されていません。";
                 }
                 else
                 {
                     MessageBox.Show( "指定されたDBファイルが存在しません。", "エラー", MessageBoxButton.OK, MessageBoxImage.Error );
-                    this.StatusMessage = "指定されたDBファイルが存在しません。";
+                    this.statusMessage = "指定されたDBファイルが存在しません。";
                 }
                 return;
             }
 
-            this.StatusMessage = string.Empty;
+            this.statusMessage = string.Empty;
 
-            sqlStmt = string.IsNullOrEmpty( sqlStmt ) ? this.SqlStmt : sqlStmt;
-            this.SqlExecuted = " \"" + Regex.Replace( sqlStmt, @"\r\n|\r|\n", " " ).Trim() + "\"";
+            a_sqlStmt = string.IsNullOrEmpty( a_sqlStmt ) ? this.sqlStmt : a_sqlStmt;
+            this.sqlExecuted = " \"" + Regex.Replace( a_sqlStmt, @"\r\n|\r|\n", " " ).Trim() + "\"";
 
-            if( !string.IsNullOrEmpty( this.DbFilePath ) && !string.IsNullOrEmpty( sqlStmt ) )
+            if( !string.IsNullOrEmpty( this.dbFilePath ) && !string.IsNullOrEmpty( a_sqlStmt ) )
             {
                 string connectionString = new SQLiteConnectionStringBuilder()
                 {
-                    DataSource = this.DbFilePath,
+                    DataSource = this.dbFilePath,
                     Password = Properties.Settings.Default.Password,
                     SyncMode = SynchronizationModes.Off,
                     JournalMode = SQLiteJournalModeEnum.Wal,
@@ -82,32 +82,32 @@ namespace SQLiteEditor
                     try
                     {
                         conn.Open();
-                        using( var cmd = new SQLiteCommand( sqlStmt, conn ) )
+                        using( var cmd = new SQLiteCommand( a_sqlStmt, conn ) )
                         {
-                            bool isQuery = false;
+                            bool isQuery_flg = false;
                             using( var reader = cmd.ExecuteReader() )
                             {
-                                isQuery = reader.HasRows;
+                                isQuery_flg = reader.HasRows;
                             }
 
-                            if( isQuery )
+                            if( isQuery_flg )
                             {
                                 /* SQLがクエリーステートメントの場合 */
                                 using( var adapter = new SQLiteDataAdapter( cmd ) )
                                 {
                                     DataTable table = new DataTable();
                                     int result = adapter.Fill( table );
-                                    this.StatusMessage = $"取得件数: {result} 件";
+                                    this.statusMessage = $"取得件数: {result} 件";
  
-                                    this.DataList = table.DefaultView;
-                                    this.RaisePropertyChanged( nameof( this.DataList ) );
+                                    this.dataList = table.DefaultView;
+                                    this.RaisePropertyChanged( nameof( this.dataList ) );
                                 }
                             }
                             else
                             {
                                 /* SQLが非クエリーステートメントの場合 */
                                 int result = cmd.ExecuteNonQuery();
-                                this.StatusMessage = $"影響件数: {result} 件";
+                                this.statusMessage = $"影響件数: {result} 件";
                             }
                         }
                     }
@@ -118,21 +118,21 @@ namespace SQLiteEditor
                 }
             }
 
-            this.RaisePropertyChanged( nameof( this.StatusMessage ) );
-            this.RaisePropertyChanged( nameof( this.SqlExecuted ) );
+            this.RaisePropertyChanged( nameof( this.statusMessage ) );
+            this.RaisePropertyChanged( nameof( this.sqlExecuted ) );
         }
 
         public void Load()
         {
-            this.DbFilePath = Properties.Settings.Default.DbFilePath;
-            this.SqlStmt = Properties.Settings.Default.SqlStmt;
-            this.RaisePropertyChanged( nameof( this.SqlStmt ) );
+            this.dbFilePath = Properties.Settings.Default.DbFilePath;
+            this.sqlStmt = Properties.Settings.Default.SqlStmt;
+            this.RaisePropertyChanged( nameof( this.sqlStmt ) );
         }
 
         public void Save()
         {
-            Properties.Settings.Default.DbFilePath = this.DbFilePath;
-            Properties.Settings.Default.SqlStmt = this.SqlStmt;
+            Properties.Settings.Default.DbFilePath = this.dbFilePath;
+            Properties.Settings.Default.SqlStmt = this.sqlStmt;
             Properties.Settings.Default.Save();
         }
 

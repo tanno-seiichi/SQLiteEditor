@@ -21,8 +21,8 @@ namespace SQLiteEditor
         /// <remarks>This method upgrades user settings if they have not been upgraded yet and configures
         /// the JIT profile optimization to use a profile stored in the user's Documents folder. It should be called as
         /// part of the application's startup sequence.</remarks>
-        /// <param name="e">An object that contains the event data for the startup event.</param>
-        protected override void OnStartup( StartupEventArgs e )
+        /// <param name="a_e">An object that contains the event data for the startup event.</param>
+        protected override void OnStartup( StartupEventArgs a_e )
         {
             // まだUpgradeしていない場合のみ実行
             if( !SQLiteEditor.Properties.Settings.Default.IsUpgraded )
@@ -42,7 +42,7 @@ namespace SQLiteEditor
             }
             System.Runtime.ProfileOptimization.SetProfileRoot( appRoot );
             System.Runtime.ProfileOptimization.StartProfile( appName + ".jitprofile" );
-            base.OnStartup( e );
+            base.OnStartup( a_e );
         }
 
         // Properties.Settings.Defaultの古いバージョンのデータを移行する
