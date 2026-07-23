@@ -114,6 +114,8 @@ namespace SQLiteEditor
                 }
             }
 
+            _icon.Visibility = Visibility.Collapsed;
+
             /* 透過表示設定 */
             this.SetTransparency( Properties.Settings.Default.Transparent );
 
