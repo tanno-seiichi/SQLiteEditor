@@ -11,7 +11,7 @@
     <MajorUpgrade 
 		DowngradeErrorMessage="!(loc.DowngradeError)" />
 
-    <ui:WixUI Id="WixUI_Minimal" />
+    <ui:WixUI Id="WixUI_MinimalUpgrade" />
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 	  
 	  <Icon Id="ProductIcon" SourceFile="..\SQLiteEditor\Resources\SQLiteEditor.ico" />
