@@ -2,6 +2,8 @@
   <PropertyGroup>
     <OutputType>Package</OutputType>
     <OutputName>SQLiteEditor</OutputName>
+    <!-- .wixpdb（デバッグ・パッチ生成用シンボルファイル）を出力せず、.msi単体になるようにする -->
+    <SuppressPdbOutput>true</SuppressPdbOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <BindFiles>false</BindFiles>

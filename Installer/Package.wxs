@@ -17,6 +17,9 @@
 	  <Icon Id="ProductIcon" SourceFile="..\SQLiteEditor\Resources\SQLiteEditor.ico" />
 	  <Property Id="ARPPRODUCTICON" Value="ProductIcon" />	  
     
+    <!-- cabファイルを外部ファイルとして出力せず、.msiファイルに埋め込む -->
+    <MediaTemplate EmbedCab="yes" />
+    
     <Feature Id="Main">
       <ComponentGroupRef Id="SQLiteEditor" />
     </Feature>
